@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 
 class ViewAdapter(val taskList:MutableList<Task>):
@@ -29,7 +28,9 @@ class ViewAdapter(val taskList:MutableList<Task>):
             check.isChecked = cur.isDone
             check.setOnCheckedChangeListener{
                     _, _ ->
-                cur.isDone =!cur.isDone
+                run {
+                    cur.isDone =!cur.isDone
+                    }
             }
         }
     }

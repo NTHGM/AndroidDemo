@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
 
         //set up adapter and list
-        adapter = ViewAdapter(mutableListOf(), this)
+        adapter = ViewAdapter(mutableListOf(), this.applicationContext)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter

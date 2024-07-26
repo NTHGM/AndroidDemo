@@ -53,39 +53,40 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun updateIsDone(task:Task){
         val db = this.writableDatabase
         val value = ContentValues()
-        value.put(DONE_COL,task.isDone)
+        var x = 1
+        if(task.isDone==false) x=0
+        value.put(DONE_COL,x)
         db.update(TABLE_NAME, value, "id=?", arrayOf(task.id));
         db.close();
     }
 
     //Get all task from storage
     @SuppressLint("Range")
-    fun getList():MutableList<Task> {
-        val list = mutableListOf<Task>()
+    fun getList(list : MutableList<Task>):MutableList<Task> {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
         if (cursor != null) {
             try {
                 cursor.moveToFirst()
                 val task = Task(
-                    cursor.getString(cursor.getColumnIndexOrThrow(ID_COL)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(TASKNAME_COl)),
-                    convert(cursor.getInt(cursor.getColumnIndexOrThrow(DONE_COL)))
+                    cursor.getString(cursor.getColumnIndex(ID_COL)),
+                    cursor.getString(cursor.getColumnIndex(TASKNAME_COl)),
+                    convert(cursor.getInt(cursor.getColumnIndex(DONE_COL)))
                 )
                 list.add(task)
                 while (cursor.moveToNext()) {
                     val task = Task(
-                        cursor.getString(cursor.getColumnIndexOrThrow(ID_COL)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(TASKNAME_COl)),
-                        convert(cursor.getInt(cursor.getColumnIndexOrThrow(DONE_COL)))
+                        cursor.getString(cursor.getColumnIndex(ID_COL)),
+                        cursor.getString(cursor.getColumnIndex(TASKNAME_COl)),
+                        convert(cursor.getInt(cursor.getColumnIndex(DONE_COL)))
                     )
                     list.add(task)
                 }
             }catch (e:Exception){
 
             }
-                cursor.close()
-    }
+            cursor.close()
+        }
         db.close()
         return list
     }

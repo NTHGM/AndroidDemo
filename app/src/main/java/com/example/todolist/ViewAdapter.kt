@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
+class ViewAdapter(var taskList:MutableList<Task>,val mainContext:Context):
     RecyclerView.Adapter<ViewAdapter.TaskViewHolder>(){
         lateinit var db:DBHelper
     class TaskViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
@@ -27,15 +28,16 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
             textView.text = cur.taskInfo
             check.isChecked = cur.isDone
             check.setOnCheckedChangeListener{
-                    _, _ ->
-                run {
-                    cur.isDone =!cur.isDone
-                    db = DBHelper(mainContext.baseContext,null)
-                    db.updateIsDone(cur)
-                    db.close()
-                }
+                    _, _ ->done(cur)
             }
         }
+    }
+
+    fun done(task:Task){
+        task.isDone=!task.isDone
+        db = DBHelper(mainContext,null)
+        db.updateIsDone(task)
+        db.close()
     }
 
     override fun getItemCount(): Int {
@@ -43,7 +45,7 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
     }
 
     fun addTask(task: Task) {
-        db = DBHelper(mainContext.baseContext, null)
+        db = DBHelper(mainContext, null)
         db.addTask(task)
         taskList.add(task)
         notifyItemInserted(taskList.size - 1)
@@ -57,7 +59,7 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
                 tmp.add(t.id)
             }
         }
-        db = DBHelper(mainContext.baseContext, null)
+        db = DBHelper(mainContext, null)
         db.deleteTask(tmp)
         tmp.clear()
         taskList.removeAll { task ->
@@ -68,8 +70,9 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
     }
 
     fun reload(){
-        db = DBHelper(this.mainContext.baseContext, null)
-        taskList = db.getList()
+        db = DBHelper(mainContext, null)
+        taskList.clear()
+        db.getList(taskList)
         notifyDataSetChanged()
         db.close()
     }

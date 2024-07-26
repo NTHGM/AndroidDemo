@@ -30,7 +30,10 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
                     _, _ ->
                 run {
                     cur.isDone =!cur.isDone
-                    }
+                    db = DBHelper(mainContext.baseContext,null)
+                    db.updateIsDone(cur)
+                    db.close()
+                }
             }
         }
     }
@@ -44,6 +47,7 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
         db.addTask(task)
         taskList.add(task)
         notifyItemInserted(taskList.size - 1)
+        db.close()
     }
 
     fun deleteDoneTask() {
@@ -60,11 +64,13 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
             task.isDone
         }
         notifyDataSetChanged()
+        db.close()
     }
 
     fun reload(){
         db = DBHelper(this.mainContext.baseContext, null)
         taskList = db.getList()
         notifyDataSetChanged()
+        db.close()
     }
 }

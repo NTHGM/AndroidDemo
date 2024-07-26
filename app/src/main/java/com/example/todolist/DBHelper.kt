@@ -50,6 +50,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
     }
 
+    fun updateIsDone(task:Task){
+        val db = this.writableDatabase
+        val value = ContentValues()
+        value.put(DONE_COL,task.isDone)
+        db.update(TABLE_NAME, value, "id=?", arrayOf(task.id));
+        db.close();
+    }
+
     //Get all task from storage
     @SuppressLint("Range")
     fun getList():MutableList<Task> {

@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 
-class ViewAdapter(val taskList:MutableList<Task>):
+class ViewAdapter(var taskList:MutableList<Task>,val mainContext:MainActivity):
     RecyclerView.Adapter<ViewAdapter.TaskViewHolder>(){
-
+        lateinit var db:DBHelper
     class TaskViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
         val textView:TextView = itemView.findViewById(R.id.taskName)
         val check:CheckBox = itemView.findViewById(R.id.checkBox)
@@ -29,7 +28,12 @@ class ViewAdapter(val taskList:MutableList<Task>):
             check.isChecked = cur.isDone
             check.setOnCheckedChangeListener{
                     _, _ ->
-                cur.isDone =!cur.isDone
+                run {
+                    cur.isDone =!cur.isDone
+                    db = DBHelper(mainContext.baseContext,null)
+                    db.updateIsDone(cur)
+                    db.close()
+                }
             }
         }
     }
@@ -39,14 +43,34 @@ class ViewAdapter(val taskList:MutableList<Task>):
     }
 
     fun addTask(task: Task) {
+        db = DBHelper(mainContext.baseContext, null)
+        db.addTask(task)
         taskList.add(task)
         notifyItemInserted(taskList.size - 1)
+        db.close()
     }
 
     fun deleteDoneTask() {
+        val tmp = mutableListOf<String>()
+        for(t:Task in taskList){
+            if(t.isDone){
+                tmp.add(t.id)
+            }
+        }
+        db = DBHelper(mainContext.baseContext, null)
+        db.deleteTask(tmp)
+        tmp.clear()
         taskList.removeAll { task ->
             task.isDone
         }
         notifyDataSetChanged()
+        db.close()
+    }
+
+    fun reload(){
+        db = DBHelper(this.mainContext.baseContext, null)
+        taskList = db.getList()
+        notifyDataSetChanged()
+        db.close()
     }
 }

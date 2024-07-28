@@ -9,9 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class ViewAdapter(var taskList:MutableList<Task>,val mainContext:Context):
+class ViewAdapter(var taskList:MutableList<Task>,val db:DBHelper):
     RecyclerView.Adapter<ViewAdapter.TaskViewHolder>(){
-        lateinit var db:DBHelper
     class TaskViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
         val textView:TextView = itemView.findViewById(R.id.taskName)
         val check:CheckBox = itemView.findViewById(R.id.checkBox)
@@ -21,7 +20,7 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:Context):
         val from = LayoutInflater.from(parent.context).inflate(R.layout.task,parent,false)
         return TaskViewHolder(from)
     }
-
+    //create bug when done or undone task
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val cur = taskList[position]
         holder.apply {
@@ -35,9 +34,7 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:Context):
 
     fun done(task:Task){
         task.isDone=!task.isDone
-        db = DBHelper(mainContext,null)
-        db.updateIsDone(task)
-        db.close()
+        //db.updateIsDone(task)
     }
 
     override fun getItemCount(): Int {
@@ -45,11 +42,9 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:Context):
     }
 
     fun addTask(task: Task) {
-        db = DBHelper(mainContext, null)
         db.addTask(task)
         taskList.add(task)
         notifyItemInserted(taskList.size - 1)
-        db.close()
     }
 
     fun deleteDoneTask() {
@@ -59,21 +54,17 @@ class ViewAdapter(var taskList:MutableList<Task>,val mainContext:Context):
                 tmp.add(t.id)
             }
         }
-        db = DBHelper(mainContext, null)
         db.deleteTask(tmp)
         tmp.clear()
         taskList.removeAll { task ->
             task.isDone
         }
         notifyDataSetChanged()
-        db.close()
     }
 
     fun reload(){
-        db = DBHelper(mainContext, null)
         taskList.clear()
         db.getList(taskList)
         notifyDataSetChanged()
-        db.close()
     }
 }

@@ -13,13 +13,14 @@ class MainActivity : ComponentActivity() {
     public lateinit var addBut:Button
     public lateinit var deleteBut:Button
     public lateinit var reloadBut:Button
-
+    lateinit var db:DBHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        db = DBHelper(this.applicationContext,null)
 
         //set up adapter and list
-        adapter = ViewAdapter(mutableListOf(), this.applicationContext)
+        adapter = ViewAdapter(mutableListOf(), db)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -50,5 +51,10 @@ class MainActivity : ComponentActivity() {
             adapter.deleteDoneTask()
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        db.close()
     }
 }

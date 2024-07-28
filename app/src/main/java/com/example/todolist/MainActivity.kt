@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         db.close()
+        super.onDestroy()
     }
 }

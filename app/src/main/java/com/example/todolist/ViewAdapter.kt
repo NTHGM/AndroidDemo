@@ -20,21 +20,21 @@ class ViewAdapter(var taskList:MutableList<Task>,val db:DBHelper):
         val from = LayoutInflater.from(parent.context).inflate(R.layout.task,parent,false)
         return TaskViewHolder(from)
     }
-    //create bug when done or undone task
+
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val cur = taskList[position]
+        val cur = taskList[holder.bindingAdapterPosition]
         holder.apply {
             textView.text = cur.taskInfo
             check.isChecked = cur.isDone
-            check.setOnCheckedChangeListener{
-                    _, _ ->done(cur)
+            check.setOnClickListener{
+                    done(cur)
             }
         }
     }
 
     fun done(task:Task){
         task.isDone=!task.isDone
-        //db.updateIsDone(task)
+        db.updateIsDone(task)
     }
 
     override fun getItemCount(): Int {

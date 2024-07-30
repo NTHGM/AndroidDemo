@@ -41,14 +41,14 @@ class MainActivity : ComponentActivity() {
         addBut.setOnClickListener{
             val taskName = inputText.text.toString()
             if(!taskName.trim().isEmpty()){
-                val task = Task("",taskName)
+                val task = Task(taskName)
                 adapter.addTask(task)
             }
             inputText.text.clear()
         }
 
         deleteBut.setOnClickListener{
-            adapter.deleteDoneTask()
+            adapter.deleteDoneTasks()
         }
 
     }

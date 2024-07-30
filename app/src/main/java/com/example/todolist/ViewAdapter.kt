@@ -1,13 +1,11 @@
 package com.example.todolist
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-
 
 class ViewAdapter(var taskList:MutableList<Task>,val db:DBHelper):
     RecyclerView.Adapter<ViewAdapter.TaskViewHolder>(){
@@ -32,39 +30,83 @@ class ViewAdapter(var taskList:MutableList<Task>,val db:DBHelper):
         }
     }
 
-    fun done(task:Task){
-        task.isDone=!task.isDone
-        db.updateIsDone(task)
-    }
-
     override fun getItemCount(): Int {
         return taskList.size;
     }
 
-    fun addTask(task: Task) {
-        db.addTask(task)
-        taskList.add(task)
-        notifyItemInserted(taskList.size - 1)
+    fun done(task:Task){
+        try {
+            db.updateIsDone(task)
+            task.isDone=!task.isDone
+        }catch (e:Exception){
+            //show UI
+            e.printStackTrace()
+        }
     }
 
+    fun addTask(task: Task) {
+        try {
+            db.addTask(task)
+            taskList.add(task)
+            notifyItemInserted(taskList.size - 1)
+        }catch (e:Exception){
+            //Show UI
+            e.printStackTrace()
+        }
+    }
+
+    //delete one task a time
     fun deleteDoneTask() {
+        val tmp = mutableListOf<Task>()
+        for(t:Task in taskList){
+            if(t.isDone){
+                tmp.add(t)
+            }
+        }
+        for(t:Task in tmp){
+            try {
+                db.deleteTask(t.id)
+                taskList.remove(t)
+                notifyDataSetChanged()
+            }catch (e:Exception){
+                //Show UI
+                e.printStackTrace()
+                tmp.clear()
+                return
+            }
+        }
+    }
+
+    //delete all
+    fun deleteDoneTasks() {
         val tmp = mutableListOf<String>()
         for(t:Task in taskList){
             if(t.isDone){
                 tmp.add(t.id)
             }
         }
-        db.deleteTask(tmp)
-        tmp.clear()
-        taskList.removeAll { task ->
-            task.isDone
+        try {
+            db.deleteTasks(tmp)
+            tmp.clear()
+            taskList.removeAll { task ->
+                task.isDone
+            }
+            notifyDataSetChanged()
+        }catch (e:Exception){
+            //Show UI
+            e.printStackTrace()
+            reload()
         }
-        notifyDataSetChanged()
     }
 
     fun reload(){
         taskList.clear()
-        db.getList(taskList)
-        notifyDataSetChanged()
+        try {
+            taskList = db.getList()
+            notifyDataSetChanged()
+        }catch (e:Exception){
+            //show UI
+            e.printStackTrace()
+        }
     }
 }

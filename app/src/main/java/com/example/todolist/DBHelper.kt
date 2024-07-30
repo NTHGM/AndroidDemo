@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
 
-    //this and onUpgrade are called
-   // when getReadable or gerWriteable is call for the first time
+    //this is call at the first time create database and
+   // when getReadable or gerWriteable is call for the first time on run app
     override fun onCreate(db: SQLiteDatabase) {
         //sqlite has a hide auto-increment column name rowid,
         // and INTEGER PRIMARY KEY is a alias of rowid
@@ -45,31 +45,28 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
     }
     //delete list of task has id which chosen by user
-    fun deleteTask(ids:List<String>){
-        try {
-            val db = this.writableDatabase
-            for(i:String in ids) db.delete(TABLE_NAME,"id=?", arrayOf(i))
-        }catch(e:Exception){
-            e.printStackTrace()
-        }
+    fun deleteTasks(ids:List<String>){
+        val db = this.writableDatabase
+        for(i:String in ids) db.delete(TABLE_NAME,"id=?", arrayOf(i))
+    }
+
+    //delete a task
+    fun deleteTask(id:String){
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME,"id=?", arrayOf(id))
     }
 
     fun updateIsDone(task:Task){
-        try{
             val db = this.writableDatabase
             val value = ContentValues()
-            var x = 1
-            if(task.isDone==false) x=0
-            value.put(DONE_COL,x)
+            value.put(DONE_COL,task.isDone)
             db.update(TABLE_NAME, value, "id=?", arrayOf(task.id))
-        }catch (e:Exception){
-            e.printStackTrace()
-        }
     }
 
     //Get all task from storage
     @SuppressLint("Range")
-    fun getList(list : MutableList<Task>):MutableList<Task> {
+    fun getList():MutableList<Task> {
+        val list = mutableListOf<Task>()
         try {
             val db = this.readableDatabase
             val cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null)

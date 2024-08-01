@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reload_but">AK</string>
+    <string name="add_but">AK</string>
+    <string name="delete_but">AK</string>
+    <string name="input_text">AK</string>
+    <string name="app_name">TodoList</string>
+    <string name="title_text">AK</string>
+</resources>

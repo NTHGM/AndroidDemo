@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TodoList</string>
+    <string name="reload_but">Tải lại</string>
+    <string name="add_but">Thêm</string>
+    <string name="delete_but">Xóa</string>
+    <string name="input_text">Điền</string>
+    <string name="title_text">Danh sách</string>
+</resources>

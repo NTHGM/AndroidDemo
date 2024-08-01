@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TodoList</string>
+    <string name="reload_but">Reload</string>
+    <string name="add_but">Add</string>
+    <string name="delete_but">Delete</string>
+    <string name="input_text">Fill Task Name</string>
+    <string name="title_text">List</string>
 </resources>

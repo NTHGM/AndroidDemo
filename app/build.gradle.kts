@@ -9,8 +9,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.todolist"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 31
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -47,9 +47,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    androidResources {
-        generateLocaleConfig = true
-    }
 }
 
 dependencies {
@@ -64,6 +61,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.appcompat.resources)
 
     testImplementation(libs.junit)
 

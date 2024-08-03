@@ -36,8 +36,8 @@ class ViewAdapter(var taskList:MutableList<Task>,val db:DBHelper):
 
     fun done(task:Task){
         try {
-            db.updateIsDone(task)
             task.isDone=!task.isDone
+            db.updateIsDone(task)
         }catch (e:Exception){
             //show UI
             e.printStackTrace()

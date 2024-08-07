@@ -6,4 +6,10 @@
     <string name="delete_but">E</string>
     <string name="input_text">E</string>
     <string name="title_text">E</string>
+
+    <plurals name="task_num">
+        <item quantity="one">You have %d task</item>
+        <item quantity="other">You have %d tasks</item>
+    </plurals>
+    <string name="zero_task">No task</string>
 </resources>

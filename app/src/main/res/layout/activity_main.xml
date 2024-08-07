@@ -20,17 +20,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.953" />
 
+    <TextView
+        android:id="@+id/num_task"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="15dp"
+        android:textSize="16sp"
+        android:text="Add some task"
+        app:layout_constraintBottom_toTopOf="@+id/refresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/addBut"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/num_task"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spacer"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/spacer">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/deleteBut"

@@ -6,4 +6,10 @@
     <string name="input_text">B</string>
     <string name="app_name">TodoList</string>
     <string name="title_text">B</string>
+
+    <plurals name="task_num">
+        <item quantity="one">%d test ok</item>
+        <item quantity="other">%d tests ok</item>
+    </plurals>
+    <string name="zero_task">BasNo task</string>
 </resources>

@@ -6,4 +6,10 @@
     <string name="input_text">AK</string>
     <string name="app_name">TodoList</string>
     <string name="title_text">AK</string>
+
+    <plurals name="task_num">
+        <item quantity="one">%d test ok</item>
+        <item quantity="other">%d tests ok</item>
+    </plurals>
+    <string name="zero_task">AKNo task</string>
 </resources>

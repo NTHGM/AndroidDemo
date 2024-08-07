@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -7,8 +8,11 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.os.LocaleListCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,11 +26,13 @@ class MainActivity : AppCompatActivity() {
     public lateinit var reloadBut:Button
     lateinit var db:DBHelper
     lateinit var my_spinner:Spinner
+    lateinit var numtask:TextView
+    lateinit var res:Resources
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         db = DBHelper(this.applicationContext,null)
-
+        res = resources
         //set up adapter and list
         adapter = ViewAdapter(mutableListOf(), db)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
@@ -41,6 +47,9 @@ class MainActivity : AppCompatActivity() {
         addBut = findViewById(R.id.addBut)
         deleteBut = findViewById(R.id.deleteBut)
         reloadBut = findViewById(R.id.refresh)
+        numtask = findViewById(R.id.num_task)
+
+        setNumTask()
 
         //SetupLanguagePicker
         my_spinner = findViewById(R.id.spinner)
@@ -89,6 +98,7 @@ class MainActivity : AppCompatActivity() {
 
         reloadBut.setOnClickListener{
             adapter.reload()
+            setNumTask()
         }
 
         addBut.setOnClickListener{
@@ -98,10 +108,12 @@ class MainActivity : AppCompatActivity() {
                 adapter.addTask(task)
             }
             inputText.text.clear()
+            setNumTask()
         }
 
         deleteBut.setOnClickListener{
             adapter.deleteDoneTasks()
+            setNumTask()
         }
 
     }
@@ -109,5 +121,16 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         db.close()
         super.onDestroy()
+    }
+    //android has no custom message like ios stringdict
+    //it depend on the quantity of each language
+    //android plural resources only natively support the quantity of that language
+    //so in order to custom message we have
+    //example: english only have two types of quantity: one and other
+    fun setNumTask(){
+        //custom zero quantity
+        var x = res.getQuantityString(R.plurals.task_num,adapter.itemCount,adapter.itemCount)
+        if(adapter.itemCount==0) x = getString(R.string.zero_task)
+        numtask.text = x
     }
 }

@@ -6,4 +6,9 @@
     <string name="delete_but">Xóa</string>
     <string name="input_text">Điền</string>
     <string name="title_text">Danh sách</string>
+    <string name="zero_task">Hãy thêm việc</string>
+
+    <plurals name="task_num">
+        <item quantity="other">Bạn có %d công việc</item>
+    </plurals>
 </resources>

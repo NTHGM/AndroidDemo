@@ -12,4 +12,11 @@
         <item>ak</item>
         <item>af</item>
     </string-array>
+    //plural
+    <plurals name="task_num">
+        <item quantity="one">%d test ok</item>
+        <item quantity="other">%d tests ok</item>
+    </plurals>
+    <string name="zero_task">No task</string>
+
 </resources>

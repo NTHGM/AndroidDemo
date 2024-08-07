@@ -6,4 +6,10 @@
     <string name="delete_but">AF</string>
     <string name="input_text">AF</string>
     <string name="title_text">AF</string>
+
+    <plurals name="task_num">
+        <item quantity="one">%d test ok</item>
+        <item quantity="other">%d tests ok</item>
+    </plurals>
+    <string name="zero_task">AFNo task</string>
 </resources>

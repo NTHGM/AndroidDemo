@@ -1,6 +1,7 @@
 package com.example.todolist
 
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,13 +10,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.annotation.RequiresExtension
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todolist.Retrofit.RetrofitInstance
+import kotlinx.coroutines.launch
+import java.io.IOException
+import retrofit2.HttpException
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -28,9 +33,31 @@ class MainActivity : AppCompatActivity() {
     lateinit var my_spinner:Spinner
     lateinit var numtask:TextView
     lateinit var res:Resources
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setUp()
+
+        //RetrofitApi
+        lifecycleScope.launch {
+            val response = try {
+                RetrofitInstance.api.getTodos()
+            } catch(e: IOException) {
+                return@launch
+            } catch (e: HttpException) {
+                return@launch
+            }
+            if(response.isSuccessful && response.body() != null) {
+
+            } else {
+
+            }
+
+        }
+    }
+
+    fun setUp(){
         db = DBHelper(this.applicationContext,null)
         res = resources
         //set up adapter and list
@@ -115,6 +142,7 @@ class MainActivity : AppCompatActivity() {
             adapter.deleteDoneTasks()
             setNumTask()
         }
+
 
     }
 
